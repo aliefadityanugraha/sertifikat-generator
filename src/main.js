@@ -5,6 +5,12 @@ import AOS from 'aos'
 import App from './App.vue'
 import router from './router'
 
+/**
+ * Main application entry point.
+ * Initializes the Vue application, integrates Vue Router,
+ * and mounts the root component to the DOM.
+ * Also configures the AOS (Animate On Scroll) library once the router is ready.
+ */
 const app = createApp(App)
 app.use(router)
 

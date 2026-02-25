@@ -69,13 +69,40 @@ const props = defineProps({
   }
 });
 
+/**
+ * Defines emitted events.
+ * @type {import('vue').Emit}
+ */
 defineEmits(['back']);
 
+/**
+ * Scaling factor to determine how the A4 certificate fits within its container.
+ * @type {import('vue').Ref<number>}
+ */
 const scale = ref(1);
+
+/**
+ * Indicates if a PDF generation is actively being processed.
+ * @type {import('vue').Ref<boolean>}
+ */
 const downloading = ref(false);
+
+/**
+ * Stores the dynamically generated Base64 representation of the QR code.
+ * @type {import('vue').Ref<string|null>}
+ */
 const qrCodeDataUrl = ref(null);
+
+/**
+ * Holds reference to the DOM element wrapping the certificate for dynamic width calculation.
+ * @type {import('vue').Ref<HTMLElement|null>}
+ */
 const containerRef = ref(null);
 
+/**
+ * Calculates the required scale to render the 800px wide certificate proportionally
+ * within whatever constraints the current window/wrapper requires.
+ */
 const updateScale = () => {
   if (containerRef.value) {
     // Dynamically calculate based on exact container width
@@ -87,6 +114,11 @@ const updateScale = () => {
   }
 };
 
+/**
+ * Initialization lifecycle hook.
+ * Attaches resize listeners, fires an API log of the interaction,
+ * and builds the verification QR code corresponding to the student's unique ID.
+ */
 onMounted(async () => {
   updateScale();
   window.addEventListener('resize', updateScale);
@@ -110,11 +142,21 @@ onUnmounted(() => {
   window.removeEventListener('resize', updateScale);
 });
 
+/**
+ * Handles error events when an image fails to load gracefully by hiding it
+ * and applying a placeholder background.
+ * @param {Event} e - The native DOM Error event.
+ */
 const handleImageError = (e) => {
   e.target.style.display = 'none';
   e.target.parentElement.classList.add('bg-indigo-50');
 };
 
+/**
+ * Orchestrates rendering the DOM to canvas and outputting a downloaded PDF.
+ * @async
+ * @returns {Promise<void>}
+ */
 const download = async () => {
   downloading.value = true;
   try {

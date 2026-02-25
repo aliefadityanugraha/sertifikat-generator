@@ -81,10 +81,31 @@ import { useRoute } from 'vue-router';
 import { api } from '../services/api';
 
 const route = useRoute();
+
+/**
+ * Indicates if the validation process is currently checking against the server.
+ * @type {import('vue').Ref<boolean>}
+ */
 const loading = ref(true);
+
+/**
+ * Indicates if the queried certificate number is officially valid and recognized.
+ * @type {import('vue').Ref<boolean>}
+ */
 const isValid = ref(false);
+
+/**
+ * Holds data of the authenticated student if found correctly.
+ * @type {import('vue').Ref<Object|null>}
+ */
 const student = ref(null);
 
+/**
+ * Triggered on component mount. Extracts ID from URL, fetches student pool securely, 
+ * and verifies if the exact string representation matches the encoded ID payload.
+ * Provides user feedback directly by adjusting the display states.
+ * @async
+ */
 onMounted(async () => {
   loading.value = true;
   const rawId = route.params.id;

@@ -90,14 +90,7 @@
       <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#FDE68A_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
       <div class="p-8 sm:p-10 relative">
-        <div class="text-center relative">
-          <!-- Mosque Silhouette subtle -->
-          <!-- <div class="absolute -top-6 inset-x-0 flex justify-center opacity-10 pointer-events-none">
-            <svg width="240" height="80" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
-              <path d="M120 0 L135 25 H165 L175 45 V80 H65 V45 L75 25 H105 Z M35 45 C35 25 55 25 55 45 V80 H35 Z M185 45 C185 25 205 25 205 45 V80 H185 Z" fill="#FDE68A"/>
-            </svg>
-          </div> -->
-          
+        <div class="text-center relative">        
           <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 mb-3 drop-shadow-sm leading-tight font-serif tracking-wide">
             Sertifikat <br/> Pondok Ramadhan
           </h1>
@@ -222,6 +215,10 @@ import CertificatePreview from '../components/CertificatePreview.vue';
 import kelasData from '../data/kelas.json';
 import confetti from 'canvas-confetti';
 
+/**
+ * Reactive form state for searching a student.
+ * @type {import('vue').UnwrapNestedRefs<{nama: string, kelas: string}>}
+ */
 const form = reactive({ nama: '', kelas: '' });
 const loading = ref(false);
 const error = ref('');
@@ -229,6 +226,12 @@ const matchingStudents = ref(null);
 const studentData = ref(null);
 const kelasList = ref(kelasData);
 
+/**
+ * Initiates the search process to find a student's certificate data.
+ * Sets the loading state, clears errors, and makes an API call.
+ * @async
+ * @returns {Promise<void>}
+ */
 const checkCertificate = async () => {
   loading.value = true;
   error.value = '';
@@ -249,6 +252,11 @@ const checkCertificate = async () => {
   }
 };
 
+/**
+ * Selects a specific student from the search results to display their certificate.
+ * Triggers a confetti animation upon successful selection.
+ * @param {Object} student - The selected student object.
+ */
 const selectStudent = (student) => {
   studentData.value = student;
   
@@ -264,6 +272,10 @@ const selectStudent = (student) => {
   }, 100);
 };
 
+/**
+ * Resets the active search state, hiding the results or certificate preview
+ * and allowing the user to search again.
+ */
 const resetSearch = () => {
   matchingStudents.value = null;
   studentData.value = null;

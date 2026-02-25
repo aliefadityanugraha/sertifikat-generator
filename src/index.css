@@ -45,3 +45,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Vue 3 Easy Data Table - Dark Cyberpunk Theme Overrides */
+.vue3-easy-data-table-dark {
+  --easy-table-border: 1px solid rgba(255, 255, 255, 0.05);
+  --easy-table-row-border: 1px solid rgba(255, 255, 255, 0.05);
+
+  --easy-table-header-font-color: #94a3b8;
+  --easy-table-header-background-color: transparent;
+  --easy-table-header-font-size: 13px;
+  --easy-table-header-item-padding: 14px 20px;
+
+  --easy-table-body-even-row-font-color: #cbd5e1;
+  --easy-table-body-even-row-background-color: rgba(15, 23, 42, 0.3);
+  --easy-table-body-row-font-color: #cbd5e1;
+  --easy-table-body-row-background-color: transparent;
+  --easy-table-body-row-font-size: 14px;
+  --easy-table-body-row-hover-font-color: #fbbf24;
+  --easy-table-body-row-hover-background-color: rgba(30, 41, 59, 0.8);
+  --easy-table-body-item-padding: 16px 20px;
+
+  --easy-table-footer-background-color: transparent;
+  --easy-table-footer-font-color: #94a3b8;
+  --easy-table-footer-font-size: 13px;
+  --easy-table-footer-padding: 16px 20px;
+  
+  --easy-table-message-font-color: #64748b;
+  --easy-table-loading-mask-background-color: rgba(15, 23, 42, 0.5);
+}
