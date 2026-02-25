@@ -8,6 +8,11 @@ const routes = [
     component: () => import('../pages/PublicPage.vue')
   },
   {
+    path: '/verify/:id',
+    name: 'Verify',
+    component: () => import('../pages/VerifyPage.vue')
+  },
+  {
     path: '/admin',
     name: 'AdminLogin',
     component: () => import('../pages/AdminLogin.vue'),

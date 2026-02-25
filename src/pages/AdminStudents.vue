@@ -11,48 +11,44 @@
         </button>
       </div>
 
-      <!-- Table Section -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <!-- Search & Table Section -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div class="flex flex-col sm:flex-row mb-4 justify-between items-center gap-4">
+           <div class="w-full sm:w-1/3 relative">
+             <input type="text" v-model="searchValue" placeholder="Cari nama peserta..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-gray-900 outline-none text-sm" />
+             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+           </div>
+        </div>
+        
         <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left">
-            <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th scope="col" class="px-6 py-4 font-semibold">Nama Peserta</th>
-                <th scope="col" class="px-6 py-4 font-semibold">Kelas</th>
-                <th scope="col" class="px-6 py-4 font-semibold">No. Sertifikat</th>
-                <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-if="loading" class="bg-white border-b border-gray-100">
-                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
-                  <div class="inline-flex items-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    Memuat data...
-                  </div>
-                </td>
-              </tr>
-              <tr v-else-if="students.length === 0" class="bg-white border-b border-gray-100">
-                <td colspan="4" class="px-6 py-8 text-center text-gray-500">Belum ada data peserta.</td>
-              </tr>
-              <tr v-for="student in students" :key="student.id || student.nomor_sertifikat" class="bg-white border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td class="px-6 py-4 font-medium text-gray-900">{{ student.nama }}</td>
-                <td class="px-6 py-4 text-gray-600">{{ student.kelas }}</td>
-                <td class="px-6 py-4 text-gray-600 font-mono text-xs">{{ student.nomor_sertifikat }}</td>
-                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
-                  <button @click="openModal('edit', student)" class="text-blue-600 hover:text-blue-800 px-2 py-1 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors inline-flex items-center">
+          <Vue3EasyDataTable
+            :headers="headers"
+            :items="students"
+            :loading="loading"
+            :search-field="searchField"
+            :search-value="searchValue"
+            theme-color="#111827"
+            hide-footer-if-empty
+          >
+            <!-- Custom Slot for actions -->
+            <template #item-aksi="student">
+               <div class="flex justify-end space-x-2 whitespace-nowrap">
+                  <button @click="openModal('edit', student)" class="text-blue-600 hover:text-blue-800 px-2 py-1 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors inline-flex items-center text-xs font-semibold">
                     Edit
                   </button>
-                  <button @click="handleDelete(student)" class="text-red-600 hover:text-red-800 px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-colors inline-flex items-center">
+                  <button @click="handleDelete(student)" class="text-red-600 hover:text-red-800 px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-colors inline-flex items-center text-xs font-semibold">
                     Hapus
                   </button>
-                  <button @click="handleGenerate(student)" class="text-indigo-600 hover:text-indigo-800 px-2 py-1 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors inline-flex items-center">
+                  <button @click="handleGenerate(student)" class="text-indigo-600 hover:text-indigo-800 px-2 py-1 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors inline-flex items-center text-xs font-semibold">
                     Sertifikat
                   </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+               </div>
+            </template>
+            <!-- Empty state -->
+            <template #empty-message>
+               <div class="py-8 text-center text-gray-500">Belum ada data peserta.</div>
+            </template>
+          </Vue3EasyDataTable>
         </div>
       </div>
       
@@ -105,10 +101,22 @@ import { ref, reactive, onMounted, nextTick } from 'vue';
 import AdminLayout from '../components/AdminLayout.vue';
 import CertificatePreview from '../components/CertificatePreview.vue';
 import { api } from '../services/api';
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 
 const students = ref([]);
 const loading = ref(true);
 const submitting = ref(false);
+
+const searchField = ref("nama");
+const searchValue = ref("");
+
+const headers = [
+  { text: "NAMA PESERTA", value: "nama", sortable: true },
+  { text: "KELAS", value: "kelas", sortable: true },
+  { text: "NO. SERTIFIKAT", value: "nomor_sertifikat" },
+  { text: "AKSI", value: "aksi" },
+];
 
 const isModalOpen = ref(false);
 const modalMode = ref('create'); // 'create' or 'edit'

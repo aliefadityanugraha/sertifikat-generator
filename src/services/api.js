@@ -1,4 +1,4 @@
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMK26xM7FU8EixIYWzFJIurLRAFOqwUiSTF69vi_qMsLaZm8BlC-lKlgqekio6rwOTbw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzf8tzszSug6tEQDXqiXIZCxBDyhSEvghKerWciDlvrZM6yuukTITknjnlI-QJo7bhUvQ/exec';
 
 const normalize = (data) => {
   if (!data) return null;
@@ -13,7 +13,7 @@ const normalize = (data) => {
 
 const mapToApi = (student) => {
   return {
-    ID: student.id,
+    ID: student.id || student.nomor_sertifikat, // fallback to nomorsertifikat as id
     NAMA: student.nama,
     KELAS: student.kelas,
     NOMOR: student.nomor_sertifikat
@@ -25,11 +25,14 @@ export const api = {
     try {
       const res = await fetch(`${SCRIPT_URL}?action=read`);
       if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
-      return Array.isArray(data) ? data.map(normalize) : [];
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        return json.data.map(normalize);
+      }
+      return [];
     } catch (e) {
       console.error(e);
-      return []; // Return dummy or empty if URL is invalid dummy
+      return [];
     }
   },
   
@@ -38,8 +41,11 @@ export const api = {
       const params = new URLSearchParams({ action: 'find', nama, kelas });
       const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
       if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
-      return Array.isArray(data) ? data.map(normalize) : [];
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        return json.data.map(normalize);
+      }
+      return [];
     } catch (e) {
       console.error(e);
       // Dummy response for preview purposes if real API is missing
@@ -53,7 +59,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(mapToApi(student)),
     });
-    return await res.json().catch(() => null);
+    const json = await res.json().catch(() => null);
+    return json?.success ? json.data : null;
   },
   
   async updateStudent(student) {
@@ -61,7 +68,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(mapToApi(student)),
     });
-    return await res.json().catch(() => null);
+    const json = await res.json().catch(() => null);
+    return json?.success ? json.data : null;
   },
   
   async deleteStudent(id) {
@@ -69,6 +77,30 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ ID: id }),
     });
-    return await res.json().catch(() => null);
+    const json = await res.json().catch(() => null);
+    return json?.success ? json.data : null;
+  },
+  
+  async recordGenerate(student) {
+    try {
+      await fetch(`${SCRIPT_URL}?action=record_log`, {
+        method: 'POST',
+        // mode: 'no-cors' allows sending cross-origin blind POSTs without preflight
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ID: student.id || student.nomor_sertifikat || "N/A",
+          NAMA: student.nama,
+          KELAS: student.kelas,
+          NOMOR: student.nomor_sertifikat
+        }),
+      });
+      return true;
+    } catch (e) {
+      console.error('Failed to send generate record log', e);
+      return false;
+    }
   }
 };

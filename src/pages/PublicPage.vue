@@ -66,14 +66,11 @@
     </RouterLink>
 
     <!-- Header / Brand Identity Top -->
-    <div data-aos="zoom-out-down" data-aos-duration="1000" class="z-20 w-full mb-8 mt-12 md:mt-0 flex items-center justify-center pointer-events-none">
+    <div data-aos="zoom-out-down" data-aos-duration="500" class="z-20 w-full mb-8 mt-12 md:mt-0 flex items-center justify-center pointer-events-none">
       <div class="flex items-center space-x-4 bg-slate-900/30 backdrop-blur-md px-6 py-3 rounded-full border border-white/5 shadow-[0_5px_15px_rgba(0,0,0,0.3)]">
         <!-- Logo SMK PGRI SVG Placeholder & Accent -->
-        <div class="relative w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-300 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.3)] border border-amber-400">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
-            <path d="M12 7l1.5 3h3.5l-2.5 2.5 1 3.5-3-1.5-3 1.5 1-3.5L8 10h3.5z" fill="#0F172A" stroke="none"></path>
-          </svg>
+        <div class="relative w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-300 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.3)] border border-amber-400 overflow-hidden">
+          <img src="/logo-smkn2-pgri.png" alt="logo-smkn2-pgri" class="text-indigo-900">
         </div>
         <div class="flex flex-col text-left">
           <span class="text-white font-extrabold text-lg tracking-wide uppercase drop-shadow-md leading-tight">SMK PGRI 2 Kediri</span>
@@ -86,20 +83,20 @@
     </div>
 
     <!-- Main Card Content -->
-    <div data-aos="zoom-in-up" data-aos-duration="1200" class="z-20 w-full max-w-lg bg-slate-900/60 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-white/10 relative">
+    <div data-aos="zoom-in-up" data-aos-duration="550" class="z-20 w-full max-w-lg bg-slate-900/60 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-white/10 relative">
       <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
       
       <!-- Islamic Pattern Overlay for the card background -->
       <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#FDE68A_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
       <div class="p-8 sm:p-10 relative">
-        <div class="text-center mb-10 relative">
+        <div class="text-center relative">
           <!-- Mosque Silhouette subtle -->
-          <div class="absolute -top-6 inset-x-0 flex justify-center opacity-10 pointer-events-none">
+          <!-- <div class="absolute -top-6 inset-x-0 flex justify-center opacity-10 pointer-events-none">
             <svg width="240" height="80" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
               <path d="M120 0 L135 25 H165 L175 45 V80 H65 V45 L75 25 H105 Z M35 45 C35 25 55 25 55 45 V80 H35 Z M185 45 C185 25 205 25 205 45 V80 H185 Z" fill="#FDE68A"/>
             </svg>
-          </div>
+          </div> -->
           
           <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 mb-3 drop-shadow-sm leading-tight font-serif tracking-wide">
             Sertifikat <br/> Pondok Ramadhan
@@ -108,31 +105,39 @@
         </div>
 
         <div v-if="!matchingStudents || matchingStudents.length === 0">
-          <form @submit.prevent="checkCertificate" class="space-y-6">
+          <form @submit.prevent="checkCertificate" class="space-y-6 mt-6">
             <div class="space-y-2 relative">
               <label class="block text-sm font-semibold text-slate-300">Nama Lengkap</label>
-              <input 
-                v-model="form.nama"
-                type="text" 
-                class="w-full px-5 py-3.5 rounded-xl border border-slate-700/50 bg-slate-800/50 text-white placeholder-slate-500 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-sm shadow-inner outline-none"
-                placeholder="Masukkan nama lengkap"
-                required
-              />
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-400 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <input 
+                  v-model="form.nama"
+                  type="text" 
+                  class="w-full pl-12 pr-5 py-3.5 rounded-xl border border-slate-700/50 bg-slate-800/50 text-white placeholder-slate-500 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-sm shadow-inner outline-none"
+                  placeholder="Masukkan nama lengkap"
+                  required
+                />
+              </div>
             </div>
             
             <div class="space-y-2 relative">
               <label class="block text-sm font-semibold text-slate-300">Kelas</label>
-              <div class="relative">
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-400 transition-colors z-10">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                </div>
                 <select 
                   v-model="form.kelas"
-                  class="w-full px-5 py-3.5 rounded-xl border border-slate-700/50 bg-slate-800/50 text-white placeholder-slate-500 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-sm shadow-inner outline-none appearance-none cursor-pointer"
+                  class="w-full pl-12 pr-10 py-3.5 rounded-xl border border-slate-700/50 bg-slate-800/50 text-white placeholder-slate-500 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-sm shadow-inner outline-none appearance-none cursor-pointer relative z-0"
                   required
                 >
                   <option value="" disabled selected>Pilih Kelas Anda</option>
                   <option v-for="k in kelasList" :key="k" :value="k" class="bg-slate-800 text-white">{{ k }}</option>
                 </select>
                 <!-- Custom Dropdown Icon -->
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-amber-400">
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-amber-400 z-10">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
               </div>
@@ -141,11 +146,14 @@
             <button 
               type="submit"
               :disabled="loading"
-              class="w-full py-4 px-4 mt-6 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-900 font-bold text-lg rounded-xl shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.5)] transform hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:filter-none disabled:cursor-not-allowed flex justify-center items-center"
+              class="relative w-full py-4 px-4 mt-8 overflow-hidden bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-400 hover:via-yellow-300 hover:to-amber-400 bg-[length:200%_auto] hover:bg-[position:right_center] text-slate-900 font-extrabold text-lg rounded-xl shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transform hover:-translate-y-0.5 transition-all duration-500 disabled:opacity-70 disabled:filter-none disabled:cursor-not-allowed group"
             >
-              <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              {{ loading ? 'Mencari...' : 'Cari Sertifikat' }}
+              <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+              <div class="relative flex justify-center items-center">
+                <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span class="tracking-widest">{{ loading ? 'MENCARI DATA...' : 'CARI SERTIFIKAT' }}</span>
+              </div>
             </button>
           </form>
 
@@ -183,23 +191,21 @@
         </div>
       </div>
 
-      <div v-if="studentData" class="border-t border-slate-700/50 bg-slate-800/80 p-8 sm:p-10 relative">
+      <div v-if="studentData" class="border-t border-slate-700/50 bg-slate-800/80 p-6 sm:p-10 relative">
         <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
-        <div class="bg-white rounded-2xl p-6 shadow-2xl">
-          <CertificatePreview :student="studentData" />
-        </div>
+        <CertificatePreview :student="studentData" @back="resetSearch" />
       </div>
     </div>
 
     <!-- Footer Section -->
-    <div data-aos="fade-up" data-aos-delay="800" data-aos-offset="-50" class="w-full mt-10 z-20 flex flex-col items-center justify-center text-center">
+    <div data-aos="fade-up" data-aos-delay="150" data-aos-offset="-50" class="w-full mt-10 z-20 flex flex-col items-center justify-center text-center">
       <div class="px-8 py-4 bg-slate-900/30 backdrop-blur-md rounded-full border border-white/5">
         <p class="text-slate-400/80 text-xs uppercase tracking-[0.1em] font-medium leading-relaxed">
           &copy; 2026 Hak Cipta Dilindungi <span class="hidden sm:inline">|</span><br class="sm:hidden" /> Aplikasi Sertifikat Pondok Ramadhan
           <br />
           <span class="mt-2 inline-block pt-1 border-t border-slate-700/50">
             Dibuat dengan <span class="text-red-500 animate-pulse">❤️</span> oleh 
-            <a href="https://github.com/aliefadityanugraha" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors font-bold underline decoration-amber-500/30 underline-offset-2">
+            <a href="https://github.com/aliefadityanugraha" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 transition-colors font-bold underline decoration-amber-500/30 underline-offset-2 lowercase">
               aliefadityanugraha
             </a>
           </span>
@@ -214,6 +220,7 @@ import { ref, reactive } from 'vue';
 import { api } from '../services/api';
 import CertificatePreview from '../components/CertificatePreview.vue';
 import kelasData from '../data/kelas.json';
+import confetti from 'canvas-confetti';
 
 const form = reactive({ nama: '', kelas: '' });
 const loading = ref(false);
@@ -233,7 +240,7 @@ const checkCertificate = async () => {
     if (res && res.length > 0) {
       matchingStudents.value = res;
     } else {
-      error.value = 'Data tidak ditemukan. Pastikan nama dan kelas sesuai dengan yang didaftarkan.';
+      error.value = 'Data tidak ditemukan. Pastikan nama dan kelas sudah sesuai.';
     }
   } catch (err) {
     error.value = 'Terjadi kesalahan saat mencari data.';
@@ -244,6 +251,17 @@ const checkCertificate = async () => {
 
 const selectStudent = (student) => {
   studentData.value = student;
+  
+  // Trigger Celebration Confetti
+  setTimeout(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#FDE68A', '#FCD34D', '#10B981', '#FFFFFF'],
+      disableForReducedMotion: true
+    });
+  }, 100);
 };
 
 const resetSearch = () => {
