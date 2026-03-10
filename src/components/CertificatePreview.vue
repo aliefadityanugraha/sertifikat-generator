@@ -11,29 +11,30 @@
     </div>
 
     <!-- Certificate Render Area -->
-    <div ref="containerRef" class="relative overflow-hidden rounded-xl border border-gray-200 shadow-inner bg-gray-100 aspect-[1.414/1] w-full">
+    <div ref="containerRef" class="relative overflow-hidden rounded-xl border border-gray-200 shadow-inner bg-gray-100 aspect-[16/9] w-full">
       <div 
         id="certificate-content" 
-        class="absolute top-0 left-0 bg-white w-[800px] h-[565px] origin-top-left"
-        :style="{ transform: `scale(${scale})` }"
+        class="absolute top-0 left-0 bg-white w-[3000px] h-[1687px] origin-top-left overflow-hidden shadow-2xl"
+        :style="{ 
+          transform: `scale(${scale})`,
+          backgroundImage: `url(${templateImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          imageRendering: 'crisp-edges'
+        }"
       >
-        <img src="../assets/template.png" class="absolute inset-0 w-full h-full object-cover z-0" @error="handleImageError" />
         
         <!-- Text Overlay -->
         <div class="absolute inset-0 z-10 flex flex-col items-center justify-center">
-          <div class="mt-20 text-center w-full px-12">
-            <p class="text-[40px] font-bold text-gray-800 font-serif leading-tight tracking-[0.05em]">{{ student.nama || 'Nama Peserta' }}</p>
-            <p class="text-[22px] font-medium text-gray-600 mt-4 tracking-widest font-sans">{{ student.kelas || 'X MIPA 1' }}</p>
+          <!-- Area Aman Nama (Dibatasi agar tidak menabrak mandala) -->
+          <div class="mt-54 w-full flex justify-center translate-y-[-90px] translate-x-[85px]">
+            <p 
+              class="font-bold text-gray-800 font-serif leading-tight tracking-[0.05em] max-w-[1500px] break-words text-center capitalize"
+              :style="{ fontSize: dynamicFontSize + 'px' }"
+            >
+              {{ student.nama || 'Nama Peserta' }}
+            </p>
           </div>
-          <div class="absolute bottom-16 w-full text-center">
-            <p class="text-[14px] text-gray-500 font-medium">No: {{ student.nomor_sertifikat || '001/PR/XV/2026' }}</p>
-          </div>
-
-          <!-- QR Code Verification -->
-          <!-- <div class="absolute bottom-8 right-12 z-20 flex flex-col items-center">
-            <img v-if="qrCodeDataUrl" :src="qrCodeDataUrl" class="w-16 h-16 sm:w-20 sm:h-20 p-1 bg-white border border-gray-200 rounded shadow-sm" alt="QR Verifikasi" />
-            <p v-if="qrCodeDataUrl" class="text-[7px] sm:text-[8px] tracking-[0.15em] font-bold text-gray-500 mt-1 uppercase">VERIFIED</p>
-          </div> -->
         </div>
       </div>
     </div>
@@ -57,16 +58,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { generateCertificate } from '../utils/certificateGenerator';
 import { api } from '../services/api';
 import QRCode from 'qrcode';
+import templateImage from '../assets/template.png';
 
 const props = defineProps({
   student: {
     type: Object,
     required: true
   }
+});
+
+/**
+ * Dynamically adjusts font size based on the length of the student's name.
+ * Base size is 138px. Shrinks if name exceeds ~22 characters.
+ */
+const dynamicFontSize = computed(() => {
+  const name = props.student.nama || '';
+  const baseSize = 138;
+  
+  // Sangat agresif: mulai mengecil di karakter ke-15
+  if (name.length <= 15) return baseSize;
+  
+  const shrinkFactor = (name.length - 15) * 3; // Dikali 8 agar mengecil sangat cepat
+  return Math.max(60, baseSize - shrinkFactor); // Minimal size 60px agar tetap terbaca
 });
 
 /**
@@ -106,11 +123,11 @@ const containerRef = ref(null);
 const updateScale = () => {
   if (containerRef.value) {
     // Dynamically calculate based on exact container width
-    scale.value = containerRef.value.offsetWidth / 800;
+    scale.value = containerRef.value.offsetWidth / 3000;
   } else {
     // Fallback if not evaluated yet
     const wrapperWidth = Math.min(window.innerWidth - 64, 448);
-    scale.value = wrapperWidth / 800;
+    scale.value = wrapperWidth / 3000;
   }
 };
 

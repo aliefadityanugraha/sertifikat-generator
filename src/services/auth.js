@@ -85,8 +85,7 @@ export function login(username, password) {
   // Disguised credentials check
   const _u = btoa(username);
   const _p = btoa(password);
-  
-  // Base64 equivalent of indahsaptasari & indahsaptasari123
+
   if (_u === 'aW5kYWhzYXB0YXNhcmk=' && _p === 'aW5kYWhzYXB0YXNhcmkxMjM=') {
     const token = generateToken();
     localStorage.setItem('admin_token', token);
